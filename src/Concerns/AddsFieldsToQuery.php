@@ -52,11 +52,11 @@ trait AddsFieldsToQuery
     {
         $fields = $this->request->fields()->get($relation);
 
-        if (! $fields) {
+        if (!$fields) {
             return [];
         }
 
-        if (! $this->allowedFields instanceof Collection) {
+        if (!$this->allowedFields instanceof Collection) {
             // We have requested fields but no allowed fields (yet?)
 
             throw new UnknownIncludedFieldsQuery($fields);
@@ -94,7 +94,7 @@ trait AddsFieldsToQuery
 
     protected function prependField(string $field, ?string $table = null): string
     {
-        if (! $table) {
+        if (!$table) {
             $table = $this->getModel()->getTable();
         }
 

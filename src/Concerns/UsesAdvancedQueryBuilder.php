@@ -4,14 +4,18 @@ namespace Spatie\QueryBuilder\Concerns;
 
 trait UsesAdvancedQueryBuilder
 {
+    public function getFilterables()
+    {
+        
+    }
     /**
      *  Returns all fields that can be used to filter
      *
      *  @return array
      */
-    public static function getFilterableAttributes(): array
+    public function getFilterableFields(): array
     {
-        return (new self())->getFillable();
+        return array_merge($this->getFillable(), ['properties.value']);
     }
 
     // (AGE == 100 || AGE < 10) && (GENDER == MALE && NAME contains John) && (TYPE == PERSON)

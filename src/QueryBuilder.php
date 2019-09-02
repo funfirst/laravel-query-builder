@@ -9,6 +9,7 @@ use Spatie\QueryBuilder\Concerns\FiltersQuery;
 use Spatie\QueryBuilder\Concerns\AddsFieldsToQuery;
 use Spatie\QueryBuilder\Concerns\AddsIncludesToQuery;
 use Spatie\QueryBuilder\Concerns\AppendsAttributesToResults;
+use Spatie\QueryBuilder\Concerns\UsesAdvancedQueryBuilder;
 
 class QueryBuilder extends Builder
 {
@@ -83,5 +84,19 @@ class QueryBuilder extends Builder
         $this->localMacros = $builder->getProtected('localMacros');
 
         $this->onDelete = $builder->getProtected('onDelete');
+    }
+
+    /**
+     *  Determinates if model has applied trait for using advanced query builder
+     * 
+     *  @return boolean
+     */
+    public function usesAdvancedQueryBuilder()
+    {
+        $scopeClass = get_class($this->getModel());
+        return in_array(
+            UsesAdvancedQueryBuilder::class, 
+            array_keys((new \ReflectionClass($scopeClass))->getTraits())
+        );
     }
 }

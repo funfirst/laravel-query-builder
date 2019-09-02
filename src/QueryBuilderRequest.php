@@ -58,6 +58,13 @@ class QueryBuilderRequest extends Request
         });
     }
 
+    public function advancedFilters(): Collection
+    {
+        $advancedFilterParameterName = config('query-builder.parameters.advanced_filter');
+        $advancedFilterParts = $this->query($advancedFilterParameterName, []);
+        return collect($advancedFilterParts);
+    }
+
     public function fields(): Collection
     {
         $fieldsParameterName = config('query-builder.parameters.fields');

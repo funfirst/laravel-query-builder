@@ -2,13 +2,16 @@
 
 namespace Spatie\QueryBuilder\Concerns;
 
+use Spatie\QueryBuilder\AdvancedFilters\FilterEq;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
+use Spatie\QueryBuilder\FilterGroups\FilterGroup;
 
 trait FiltersQuery
 {
     /** @var \Illuminate\Support\Collection */
     protected $allowedFilters;
+    protected $advancedFiltersToApply = [];
 
     public function allowedFilters($filters): self
     {
@@ -73,5 +76,54 @@ trait FiltersQuery
         if ($diff->count()) {
             throw InvalidFilterQuery::filtersNotAllowed($diff, $allowedFilterNames);
         }
+    }
+
+    // Automatically check get available Filters -> Model fillables, properties, custom fields
+    // Add filters from request to query if filter is from available filter
+    public function filter($allowedFilters = [])
+    {
+        if ($this->usesAdvancedQueryBuilder()) {
+            return $this->applyAdvancedFilter($allowedFilters);
+        } else {
+            return $this->allowedFilters($allowedFilters);
+        }
+    }
+
+    protected function applyAdvancedFilter($allowedFilters)
+    {
+        //TODO: Filter only by alowed filters
+        if ($allowedFilters == null) {
+            $allowedFilters = $this->getModel()->getFilterableFields();
+        } else {
+            $allowedFilters = is_array($allowedFilters) ? $allowedFilters : func_get_args();
+        }
+
+        // dd($this->request->advancedFilters()->toArray());
+        $filterGroup = $this->createFilterGroup($this->request->advancedFilters()->toArray());
+        $filterGroup->filter($this);
+        return $this;
+    }
+
+    public function createFilterGroup($filters)
+    {
+        $filterGroup = new FilterGroup($filters['type']);
+
+        if (array_key_exists('type', $filters['values'][0])) {
+            foreach ($filters['values'] as $filterValue) {
+                $childGroup = $this->createFilterGroup($filterValue);
+                $filterGroup->addGroup($childGroup);
+            }
+        } else {
+            foreach ($filters['values'] as $filter) {
+                switch ($filter['comparison']) {
+                    case 'EQ':
+                        $filter = new FilterEq($filter['value'], $filter['field']);
+                        $filterGroup->addFilter($filter);
+                        break;
+                }
+            }
+        }
+
+        return $filterGroup;
     }
 }
