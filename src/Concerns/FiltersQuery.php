@@ -3,6 +3,11 @@
 namespace Spatie\QueryBuilder\Concerns;
 
 use Spatie\QueryBuilder\AdvancedFilters\FilterEq;
+use Spatie\QueryBuilder\AdvancedFilters\FilterGt;
+use Spatie\QueryBuilder\AdvancedFilters\FilterGte;
+use Spatie\QueryBuilder\AdvancedFilters\FilterLt;
+use Spatie\QueryBuilder\AdvancedFilters\FilterLte;
+use Spatie\QueryBuilder\AdvancedFilters\FilterNeq;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\Exceptions\InvalidFilterQuery;
 use Spatie\QueryBuilder\FilterGroups\FilterGroup;
@@ -118,9 +123,26 @@ trait FiltersQuery
                 switch ($filter['comparison']) {
                     case 'EQ':
                         $filter = new FilterEq($filter['value'], $filter['field']);
-                        $filterGroup->addFilter($filter);
                         break;
+                    case 'NEQ':
+                        $filter = new FilterNeq($filter['value'], $filter['field']);
+                        break;
+                    case 'GT':
+                        $filter = new FilterGt($filter['value'], $filter['field']);
+                        break;
+                    case 'GTE':
+                        $filter = new FilterGte($filter['value'], $filter['field']);
+                        break;
+                    case 'LT':
+                        $filter = new FilterLt($filter['value'], $filter['field']);
+                        break;
+                    case 'LTE':
+                        $filter = new FilterLte($filter['value'], $filter['field']);
+                        break;
+                    default:
+                        continue;
                 }
+                $filterGroup->addFilter($filter);
             }
         }
 

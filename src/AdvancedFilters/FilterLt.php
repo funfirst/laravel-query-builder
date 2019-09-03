@@ -4,6 +4,9 @@ namespace Spatie\QueryBuilder\AdvancedFilters;
 
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ *  Filter used to compare if column value is less than given value
+ */
 class FilterLt extends AdvancedFilter
 {
     public function __invoke(Builder $query, $type)
