@@ -11,7 +11,7 @@ class FilterEq extends AdvancedFilter
 {
     public function __invoke(Builder $query, $type)
     {
-        $query->{$this->getClausuleType($type)}($this->property, '==', $this->value);
+        $query->{$this->getClausuleType($type)}($this->property, $this->value);
         return;
     }
 }
