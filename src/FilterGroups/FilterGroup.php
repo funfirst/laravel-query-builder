@@ -91,8 +91,8 @@ class FilterGroup
     {
         $groupedFilters = [];
         foreach($this->filters as $filter) {
-            if (str_contains($filter->property, '.')) {
-                $relationship = substr($filter->property, 0, strrpos($filter->property, '.'));
+            if (str_contains($filter->getProperty(), '.')) {
+                $relationship = substr($filter->getProperty(), 0, strrpos($filter->getProperty(), '.'));
                 $groupedFilters[$relationship][] = $filter;
             } else {
                 $groupedFilters['-'][] = $filter;
