@@ -4,11 +4,11 @@ namespace Spatie\QueryBuilder\AdvancedFilters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class FilterEq extends AdvancedFilter
+class FilterLt extends AdvancedFilter
 {
     public function __invoke(Builder $query, $type)
     {
-        $query->{$this->getClausuleType($type)}($this->property, $this->value);
+        $query->{$this->getClausuleType($type)}($this->property, '<', $this->value);
         return;
     }
 }
