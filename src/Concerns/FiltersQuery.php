@@ -98,8 +98,8 @@ trait FiltersQuery
             $allowedFilters = is_array($allowedFilters) ? $allowedFilters : func_get_args();
         }
 
-        // dd($this->request->advancedFilters()->toArray());
-        $filterGroup = $this->createFilterGroup($this->request->advancedFilters()->toArray());
+        $filterGroup = $this->createFilterGroup($this->request->filter); //FIXME: TEMP FOR TESTING
+        // $filterGroup = $this->createFilterGroup($this->request->filters()->toArray());
         $filterGroup->filter($this);
         return $this;
     }

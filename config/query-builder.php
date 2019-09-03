@@ -13,8 +13,6 @@ return [
 
         'filter' => 'filter',
 
-        'advanced_filter' => 'advanced_filter',
-
         'sort' => 'sort',
 
         'fields' => 'fields',
@@ -28,4 +26,5 @@ return [
      */
     'count_suffix' => 'Count',
 
+    'advanced_filter' => true,
 ];
