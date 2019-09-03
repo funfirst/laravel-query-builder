@@ -15,7 +15,7 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
 
     /**
      *  Returns Value string that is set inside Filter
-     * 
+     *
      *  @return string
      */
     public function getValue()
@@ -25,7 +25,7 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
 
     /**
      *  Returns Property string that is set inside Filter
-     * 
+     *
      *  @return string
      */
     public function getProperty()
@@ -35,11 +35,22 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
 
     /**
      *  Returns clausule as string based on Filter type -> where/orWhere
-     * 
+     *
      *  @return string
      */
     public function getClausuleType($type)
     {
         return $type === 'AND' ? 'where' : 'orWhere';
+    }
+
+    /**
+     *  Returns column name that should be filtered
+     *
+     *  @return string
+     */
+    public function getColumnName()
+    {
+        $exploded = explode('.', $this->property);
+        return end($exploded);
     }
 }
