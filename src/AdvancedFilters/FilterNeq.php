@@ -11,7 +11,7 @@ class FilterNeq extends AdvancedFilter
 {
     public function __invoke(Builder $query, $type)
     {
-        $query->{$this->getClausuleType($type)}($this->getColumnName(), '!=', $this->value);
+        $query->{$this->getClausuleType($type)}($this->getColumnName(), '!=', $this->getParsedValue($query));
         return;
     }
 }

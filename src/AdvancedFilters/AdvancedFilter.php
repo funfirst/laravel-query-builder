@@ -53,4 +53,22 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
         $exploded = explode('.', $this->property);
         return end($exploded);
     }
+
+    /**
+     *  Returns parsed value based on property type
+     * 
+     *  @return mixed
+     */
+    public function getParsedValue($query)
+    {
+        $propertyDataTypes = $query->getModel()->getFilterableFieldTypes();
+
+        if (array_key_exists($this->getColumnName(), $propertyDataTypes)) {
+            switch ($propertyDataTypes[$this->getColumnName()]) {
+                case 'DATE':
+                    return \Carbon\Carbon::parse($this->value);
+            }
+        }
+        return $this->value;
+    }
 }

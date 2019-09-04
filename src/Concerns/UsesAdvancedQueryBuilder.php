@@ -18,6 +18,17 @@ trait UsesAdvancedQueryBuilder
         return array_merge($this->getFillable(), ['properties.value']);
     }
 
+    /**
+     *  Returns
+     */
+    public function getFilterableFieldTypes()
+    {
+        if (property_exists($this, 'filterableFieldTypes') && is_array($this->filterableFieldTypes)) {
+            return $this->filterableFieldTypes;
+        }
+        return [];
+    }
+
     // (AGE == 100 || AGE < 10) && (GENDER == MALE && NAME contains John) && (TYPE == PERSON)
 
     // $filter = [
