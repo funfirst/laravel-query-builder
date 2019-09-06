@@ -11,20 +11,20 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
         'STRING' => [
             'IS', // Uses EQ
             'IS_NOT', // USES NEQ
-            'STARTS_WITH',
+            'STARTS_WITH', 
             'ENDS_WITH',
-            'CONTAINS',
+            'CONTAINS', 
             'DOES_NOT_CONTAIN',
             'HAS_ANY_VALUE',
             'IS_UNKNOWN',
         ],
         'NUMERIC' => [
-            'EQ', // EQUAL
-            'NEQ', // NOT EQUAL
-            'GT', // Greater than
-            'GTE', // Greater than or equals
-            'LT', // Less than
-            'LTE', // Less than or EQUALS
+            'EQUAL', // EQUAL
+            'NOT_EQUAL', // NOT EQUAL
+            'GREATER_THAN', // Greater than
+            'GREATER_THAN_OR_EQUAL', // Greater than or equals
+            'LESS_THAN', // Less than
+            'LESS_THAN_OR_EQUAL', // Less than or EQUALS
         ],
         'DATE' => [
             'AFTER', // Greater than
@@ -33,9 +33,9 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
             'NOT_ON', // NOT EQUAL
             'BEFORE', // Less than
             'BEFORE_INCLUDED', // Less than or EQUALS
-            'IS_UNKNOWN',
+            'IS_UNKNOWN', 
             'HAS_ANY_VALUE',
-            'MORE_THAN',
+            'MORE_THAN', 
             'EXACTLY',
             'LESS_THAN',
         ]
@@ -90,7 +90,7 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
 
     /**
      *  Returns parsed value based on property type
-     *
+     * 
      *  @return mixed
      */
     public function getParsedValue($query)
@@ -103,7 +103,7 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
                     try {
                         $date = \Carbon\Carbon::parse($this->value);
                         return $date;
-                    } catch (\Exception $e) {
+                    } catch(\Exception $e) {
                         return $this->value;
                     }
                 case 'INT':
