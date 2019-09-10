@@ -6,6 +6,8 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
 {
     protected $value;
     protected $property;
+    protected $baseModel;
+    protected $comparisonType;
 
     protected $filterTypes = [
         'STRING' => [
@@ -41,10 +43,12 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
         ]
     ];
 
-    public function __construct($value, string $property)
+    public function __construct($value, string $property, $baseModel, $comparisonType)
     {
         $this->value = $value;
         $this->property = $property;
+        $this->baseModel = $baseModel;
+        $this->comparisonType = $comparisonType;
     }
 
     /**
@@ -65,6 +69,16 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
     public function getProperty()
     {
         return $this->property;
+    }
+
+    /**
+     *  Get Comparison Type
+     * 
+     *  @return string
+     */
+    public function getComparisonType()
+    {
+        return $this->comparisonType;
     }
 
     /**
@@ -113,5 +127,25 @@ abstract class AdvancedFilter implements AdvancedFilterInterface
             }
         }
         return $this->value;
+    }
+
+    /**
+     *  Set Value
+     * 
+     *  @return void
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     *  Set Property
+     * 
+     *  @return void
+     */
+    public function setProperty($property)
+    {
+        $this->property = $property;
     }
 }

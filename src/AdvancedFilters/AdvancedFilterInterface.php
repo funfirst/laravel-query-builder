@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 interface AdvancedFilterInterface
 {
-    public function __construct($value, string $property);
+    public function __construct($value, string $property, $baseModel, $comparisonType);
 
     public function __invoke(Builder $query, $type);
 

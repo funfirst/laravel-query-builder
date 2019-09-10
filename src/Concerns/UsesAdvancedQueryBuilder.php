@@ -4,10 +4,6 @@ namespace Spatie\QueryBuilder\Concerns;
 
 trait UsesAdvancedQueryBuilder
 {
-    public function getFilterables()
-    {
-        
-    }
     /**
      *  Returns all fields that can be used to filter
      *
@@ -15,6 +11,9 @@ trait UsesAdvancedQueryBuilder
      */
     public function getFilterableFields(): array
     {
+        if (method_exists($this, 'getCustomFilterableFields')) {
+            return $this->getCustomFilterableFields();
+        }
         return array_merge($this->getFillable(), ['properties.value']);
     }
 
@@ -27,6 +26,23 @@ trait UsesAdvancedQueryBuilder
             return $this->filterableFieldTypes;
         }
         return [];
+    }
+
+    public function getPredefinedScopes()
+    {
+        if (method_exists($this, 'getCustomPredefinedScopes')) {
+            return $this->getCustomPredefinedScopes();
+        }
+
+        if (property_exists($this, 'predifinedScopes') && is_array($this->predifinedScopes)) {
+            return $this->predifinedScopes;
+        }
+        return [];
+    }
+
+    public function applyCustomFilter($query, $filter, $type)
+    {
+        return false;
     }
 
     // (AGE == 100 || AGE < 10) && (GENDER == MALE && NAME contains John) && (TYPE == PERSON)

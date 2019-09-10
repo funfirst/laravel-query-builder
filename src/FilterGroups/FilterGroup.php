@@ -45,21 +45,23 @@ class FilterGroup
     public function filter($query)
     {
         $clausuleType = $this->type === self::TYPE_AND ? 'where' : 'orWhere';
-        if (!empty($this->filterGroups)) {
+        if (!empty($this->filterGroups)) { // Go deeper into child groups
             foreach ($this->filterGroups as $filterGroup) {
                 $query->{$clausuleType}(function ($q) use ($filterGroup) {
                     $filterGroup->filter($q);
                 });
             }
-        } elseif (!empty($this->filters)) {
+        } elseif (!empty($this->filters)) { // Use filters inside group on query
             $query->where(function ($q) use ($clausuleType) {
-                foreach($this->getGroupedFiltersByRelationship() as $filterGroupName => $filterGroupFilters) {
+                foreach ($this->getGroupedFiltersByRelationship() as $filterGroupName => $filterGroupFilters) {  // Get Filters Grouped based on relationship
                     if ($filterGroupName === '-') {
-                        foreach ($filterGroupFilters as $filter) {
-                            $filter($q, $this->type);
+                        foreach ($filterGroupFilters as $filter) {  // Use filters that are not relationship filters or are custom filters
+                            if (!$q->getModel()->applyCustomFilter($q, $filter, $this->type)) { // Apply Custom filter or fallback to Predefined filter
+                                $filter($q, $this->type);
+                            }
                         }
                     } else {
-                        $q->{$clausuleType . 'Has'}($filterGroupName, function ($relationshipQuery) use ($filterGroupFilters){
+                        $q->{$clausuleType . 'Has'}($filterGroupName, function ($relationshipQuery) use ($filterGroupFilters) { // Use filters for filters grouped by relationship
                             foreach ($filterGroupFilters as $filter) {
                                 $filter($relationshipQuery, $this->type);
                             }
@@ -90,7 +92,7 @@ class FilterGroup
     public function getGroupedFiltersByRelationship()
     {
         $groupedFilters = [];
-        foreach($this->filters as $filter) {
+        foreach ($this->filters as $filter) {
             if (str_contains($filter->getProperty(), '.')) {
                 $relationship = substr($filter->getProperty(), 0, strrpos($filter->getProperty(), '.'));
                 $groupedFilters[$relationship][] = $filter;
