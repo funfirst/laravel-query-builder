@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class FilterDateExactly extends AdvancedFilter
 {
-    public function __invoke(Builder $query, $type)
+    public function __invoke(Builder $query, $type): Builder
     {
         $days = (int)$this->getParsedValue($query);
         $startOfDay = \Carbon\Carbon::parse("+{$days} days")->setTime(0, 0, 0);
         $endOfDay = \Carbon\Carbon::parse("+{$days} days")->setTime(23, 59, 59);
         
         $query->{$this->getClausuleType($type) . 'Between'}($this->getColumnName(), [$startOfDay, $endOfDay]);
-        return;
+        return $query;
     }
 }

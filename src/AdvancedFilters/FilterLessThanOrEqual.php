@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class FilterLessThanOrEqual extends AdvancedFilter
 {
-    public function __invoke(Builder $query, $type)
+    public function __invoke(Builder $query, $type): Builder
     {
         $query->{$this->getClausuleType($type)}($this->getColumnName(), '<=', $this->getParsedValue($query));
-        return;
+        return $query;
     }
 }

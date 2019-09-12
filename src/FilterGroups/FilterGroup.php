@@ -53,7 +53,7 @@ class FilterGroup
             }
         } elseif (!empty($this->filters)) { // Use filters inside group on query
             $query->where(function ($q) use ($clausuleType) {
-                foreach ($this->getGroupedFiltersByRelationship() as $filterGroupName => $filterGroupFilters) {  // Get Filters Grouped based on relationship
+                foreach ($this->getGroupedFiltersByRelationship($q) as $filterGroupName => $filterGroupFilters) {  // Get Filters Grouped based on relationship
                     if ($filterGroupName === '-') {
                         foreach ($filterGroupFilters as $filter) {  // Use filters that are not relationship filters or are custom filters
                             if (!$q->getModel()->applyCustomFilter($q, $filter, $this->type)) { // Apply Custom filter or fallback to Predefined filter
@@ -89,13 +89,17 @@ class FilterGroup
         return true;
     }
 
-    public function getGroupedFiltersByRelationship()
+    public function getGroupedFiltersByRelationship($query)
     {
         $groupedFilters = [];
         foreach ($this->filters as $filter) {
             if (str_contains($filter->getProperty(), '.')) {
                 $relationship = substr($filter->getProperty(), 0, strrpos($filter->getProperty(), '.'));
-                $groupedFilters[$relationship][] = $filter;
+                if (method_exists($query->getModel(), $relationship)) {
+                    $groupedFilters[$relationship][] = $filter;
+                } else {
+                    $groupedFilters['-'][] = $filter;    
+                }
             } else {
                 $groupedFilters['-'][] = $filter;
             }

@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class FilterDateLessThan extends AdvancedFilter
 {
-    public function __invoke(Builder $query, $type)
+    public function __invoke(Builder $query, $type): Builder
     {
         $days = (int)$this->getParsedValue($query);
         $date = \Carbon\Carbon::parse("+{$days} days")->setTime(23, 59, 59);
 
         $query->{$this->getClausuleType($type)}($this->getColumnName(), '<', $date);
-        return;
+        return $query;
     }
 }

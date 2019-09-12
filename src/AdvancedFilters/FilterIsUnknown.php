@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class FilterIsUnknown extends AdvancedFilter
 {
-    public function __invoke(Builder $query, $type)
+    public function __invoke(Builder $query, $type): Builder
     {
         $query->{$this->getClausuleType($type)}(function ($q) {
             $q->where($this->getColumnName(), null)
                 ->orWhere($this->getColumnName(), '');
         });
-        return;
+        return $query;
     }
 }

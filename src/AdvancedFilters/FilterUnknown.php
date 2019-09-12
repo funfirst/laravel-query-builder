@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class FilterUnknown extends AdvancedFilter
 {
-    public function __invoke(Builder $query, $type)
+    public function __invoke(Builder $query, $type): Builder
     {
-        return;
+        return $query;
     }
 }

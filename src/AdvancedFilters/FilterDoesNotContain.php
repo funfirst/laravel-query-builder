@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class FilterDoesNotContain extends AdvancedFilter
 {
-    public function __invoke(Builder $query, $type)
+    public function __invoke(Builder $query, $type): Builder
     {
         $query->{$this->getClausuleType($type)}($this->getColumnName(), 'NOT LIKE', '%' . $this->getParsedValue($query) . '%');
-        return;
+        return $query;
     }
 }

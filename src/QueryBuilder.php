@@ -9,6 +9,7 @@ use Spatie\QueryBuilder\Concerns\FiltersQuery;
 use Spatie\QueryBuilder\Concerns\AddsFieldsToQuery;
 use Spatie\QueryBuilder\Concerns\AddsIncludesToQuery;
 use Spatie\QueryBuilder\Concerns\AppendsAttributesToResults;
+use Spatie\QueryBuilder\Concerns\AppliesScopeToQuery;
 use Spatie\QueryBuilder\Concerns\UsesAdvancedQueryBuilder;
 
 class QueryBuilder extends Builder
@@ -17,7 +18,8 @@ class QueryBuilder extends Builder
         SortsQuery,
         AddsIncludesToQuery,
         AddsFieldsToQuery,
-        AppendsAttributesToResults;
+        AppendsAttributesToResults,
+        AppliesScopeToQuery;
 
     /** @var \Spatie\QueryBuilder\QueryBuilderRequest */
     protected $request;

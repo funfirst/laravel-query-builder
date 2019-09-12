@@ -2,6 +2,9 @@
 
 namespace Spatie\QueryBuilder\Concerns;
 
+use Spatie\QueryBuilder\AdvancedFilters\AdvancedFilterInterface;
+use Illuminate\Database\Eloquent\Builder;
+
 trait UsesAdvancedQueryBuilder
 {
     /**
@@ -40,9 +43,44 @@ trait UsesAdvancedQueryBuilder
         return [];
     }
 
-    public function applyCustomFilter($query, $filter, $type)
+    /**
+     *  Can be overrided to apply custom filter logic
+     * 
+     *  @param \Illuminate\Database\Eloquent\Builder $query
+     *  @param \Spatie\QueryBuilder\AdvancedFilters\AdvancedFilterInterface $filter
+     *  @param string $type
+     *  @return mixed -> Can return boolean or return query
+     */
+    public function applyCustomFilter(Builder $query, AdvancedFilterInterface $filter, $type)
     {
         return false;
+    }
+
+    /**
+     *  Applies Filter on given query with possibility to override property and value properties on Filter instance
+     * 
+     *  @param \Illuminate\Database\Eloquent\Builder $query
+     *  @param \Spatie\QueryBuilder\AdvancedFilters\AdvancedFilterInterface $filter
+     *  @param string $type
+     *  @param mixed $property
+     *  @param mixed $value
+     *  @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function applyFilter(Builder $query, AdvancedFilterInterface $filter, $type = null, $property = null, $value = null)
+    {
+        if ($property) {
+            $filter->setProperty($property);
+        }
+        
+        if ($value) {
+            $filter->setValue($value);
+        }
+
+        if ($type === null) {
+            $type = 'AND';
+        }
+
+        $filter($query, $type);
     }
 
     // (AGE == 100 || AGE < 10) && (GENDER == MALE && NAME contains John) && (TYPE == PERSON)

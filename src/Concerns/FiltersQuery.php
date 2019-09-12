@@ -107,7 +107,6 @@ trait FiltersQuery
 
     protected function applyAdvancedFilter($allowedFilters)
     {
-        // $filters = $this->request->filters()->toArray();
         $filters = $this->request->filter; //FIXME: TEMP FOR TESTING
         if ($allowedFilters == null) {
             $allowedFilters = $this->getModel()->getFilterableFields();
@@ -120,10 +119,13 @@ trait FiltersQuery
         return $this;
     }
 
-    public function createFilterGroup($filters, $allowedFilters = [])
+    public function createFilterGroup($filters = [], $allowedFilters = [])
     {
         $filterGroup = new FilterGroup($filters['type']);
 
+        if (empty($filters)) {
+            return $filterGroup;
+        }
         if (array_key_exists('type', $filters['values'][0])) {
             foreach ($filters['values'] as $filterValue) {
                 $childGroup = $this->createFilterGroup($filterValue, $allowedFilters);
@@ -135,95 +137,94 @@ trait FiltersQuery
                     continue;
                 }
                 switch ($filter['comparison']) {
-                    case 'EQUAL':
-                        $filter = new FilterEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                    case 'IS':
-                        $filter = new FilterEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                    case 'ON':
-                        $filter = new FilterEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                        
-                    case 'NOT_EQUAL':
-                        $filter = new FilterNotEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                    case 'IS_NOT':
-                        $filter = new FilterNotEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                    case 'NOT_ON':
-                        $filter = new FilterNotEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
+                case 'EQUAL':
+                    $filter = new FilterEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+                case 'IS':
+                    $filter = new FilterEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+                case 'ON':
+                    $filter = new FilterEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
 
-                    case 'GREATER_THAN':
-                        $filter = new FilterGreaterThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                    case 'AFTER':
-                        $filter = new FilterGreaterThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                    
-                    case 'GREATER_THAN_OR_EQUAL':
-                        $filter = new FilterGreaterThanOrEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                    case 'AFTER_INCLUDED':
-                        $filter = new FilterGreaterThanOrEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
+                case 'NOT_EQUAL':
+                    $filter = new FilterNotEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+                case 'IS_NOT':
+                    $filter = new FilterNotEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+                case 'NOT_ON':
+                    $filter = new FilterNotEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
 
-                    case 'LESS_THAN':
-                        $filter = new FilterLessThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                    case 'BEFORE':
-                        $filter = new FilterLessThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
+                case 'GREATER_THAN':
+                    $filter = new FilterGreaterThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+                case 'AFTER':
+                    $filter = new FilterGreaterThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
 
-                    
-                    case 'LESS_THAN_OR_EQUAL':
-                        $filter = new FilterLessThanOrEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                    case 'BEFORE_INCLUDED':
-                        $filter = new FilterLessThanOrEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
+                case 'GREATER_THAN_OR_EQUAL':
+                    $filter = new FilterGreaterThanOrEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+                case 'AFTER_INCLUDED':
+                    $filter = new FilterGreaterThanOrEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
 
-                    case 'STARTS_WITH':
-                        $filter = new FilterStartsWith($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
+                case 'LESS_THAN':
+                    $filter = new FilterLessThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+                case 'BEFORE':
+                    $filter = new FilterLessThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
 
-                    case 'ENDS_WITH':
-                        $filter = new FilterEndsWith($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
+                case 'LESS_THAN_OR_EQUAL':
+                    $filter = new FilterLessThanOrEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+                case 'BEFORE_INCLUDED':
+                    $filter = new FilterLessThanOrEqual($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
 
-                    case 'CONTAINS':
-                        $filter = new FilterContains($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
+                case 'STARTS_WITH':
+                    $filter = new FilterStartsWith($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
 
-                    case 'DOES_NOT_CONTAIN':
-                        $filter = new FilterDoesNotContain($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
+                case 'ENDS_WITH':
+                    $filter = new FilterEndsWith($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
 
-                    case 'HAS_ANY_VALUE':
-                        $filter = new FilterHasAnyValue($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
+                case 'CONTAINS':
+                    $filter = new FilterContains($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
 
-                    case 'IS_UNKNOWN':
-                        $filter = new FilterIsUnknown($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
+                case 'DOES_NOT_CONTAIN':
+                    $filter = new FilterDoesNotContain($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
 
-                    case 'DATE_MORE_THAN':
-                        $filter = new FilterDateMoreThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                    
-                    case 'DATE_EXACTLY':
-                        $filter = new FilterDateExactly($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
-                    
-                    case 'DATE_LESS_THAN':
-                        $filter = new FilterDateLessThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        break;
+                case 'HAS_ANY_VALUE':
+                    $filter = new FilterHasAnyValue($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
 
-                    default:
-                        $filter = new FilterUnknown($filter['value'], $filter['field'], $this->model, $filter['comparison']);
-                        continue;
-                }
+                case 'IS_UNKNOWN':
+                    $filter = new FilterIsUnknown($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+
+                case 'DATE_MORE_THAN':
+                    $filter = new FilterDateMoreThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+
+                case 'DATE_EXACTLY':
+                    $filter = new FilterDateExactly($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+
+                case 'DATE_LESS_THAN':
+                    $filter = new FilterDateLessThan($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    break;
+
+                default:
+                    $filter = new FilterUnknown($filter['value'], $filter['field'], $this->model, $filter['comparison']);
+                    continue;
+            }
                 $filterGroup->addFilter($filter);
             }
         }
