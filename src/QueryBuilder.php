@@ -9,7 +9,9 @@ use Spatie\QueryBuilder\Concerns\FiltersQuery;
 use Spatie\QueryBuilder\Concerns\AddsFieldsToQuery;
 use Spatie\QueryBuilder\Concerns\AddsIncludesToQuery;
 use Spatie\QueryBuilder\Concerns\AppendsAttributesToResults;
+use Spatie\QueryBuilder\Concerns\AppliesPagination;
 use Spatie\QueryBuilder\Concerns\AppliesScopeToQuery;
+use Spatie\QueryBuilder\Concerns\SearchInQuery;
 use Spatie\QueryBuilder\Concerns\UsesAdvancedQueryBuilder;
 
 class QueryBuilder extends Builder
@@ -19,7 +21,9 @@ class QueryBuilder extends Builder
         AddsIncludesToQuery,
         AddsFieldsToQuery,
         AppendsAttributesToResults,
-        AppliesScopeToQuery;
+        AppliesScopeToQuery,
+        SearchInQuery,
+        AppliesPagination;
 
     /** @var \Spatie\QueryBuilder\QueryBuilderRequest */
     protected $request;
