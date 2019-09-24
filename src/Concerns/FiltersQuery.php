@@ -2,7 +2,6 @@
 
 namespace Spatie\QueryBuilder\Concerns;
 
-use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\AdvancedFilters\FilterContains;
 use Spatie\QueryBuilder\AdvancedFilters\FilterDateExactly;
 use Spatie\QueryBuilder\AdvancedFilters\FilterDateLessThan;
@@ -115,7 +114,9 @@ trait FiltersQuery
         }
 
         $filterGroup = $this->createFilterGroup($filters, $allowedFilters);
-        $filterGroup->filter($this);
+        $this->where(function ($query) use ($filterGroup) {
+            $filterGroup->filter($query);
+        });
         return $this;
     }
 
