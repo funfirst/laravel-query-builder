@@ -33,7 +33,7 @@ trait SearchInQuery
             $this->where(function ($q) use ($searchParts) {
                 foreach ($searchParts as $searchPart) {
                     $model = $this->getModel();
-                    $modelSearchables = [];
+                    $modelSearchables = $model->getSearchableFields();
                     $q->where(function ($query) use ($modelSearchables, $searchPart) {
                         $query->where(function ($q) use ($modelSearchables, $searchPart) {
                             foreach ($modelSearchables as $modelSearchable) {
