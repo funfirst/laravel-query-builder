@@ -8,6 +8,19 @@ use Illuminate\Database\Eloquent\Builder;
 trait UsesAdvancedQueryBuilder
 {
     /**
+     *  Get Searchable fields
+     * 
+     *  @return array
+     */
+    public function getSearchableFields()
+    {
+        if (method_exists($this, 'getCustomSearchableFields')) {
+            return $this->getCustomSearchableFields();
+        }
+        return $this->getFillable();
+    }
+
+    /**
      *  Returns all fields that can be used to filter
      *
      *  @return array

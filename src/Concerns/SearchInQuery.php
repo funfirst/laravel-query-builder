@@ -27,6 +27,8 @@ trait SearchInQuery
         // }
         // return $this;
 
+        //FIXME: BUG when trying to search one field with value = BLACK S, it does same as with Jakub Gause, it divides and search for BLACK and S not for BLACK S
+
         $search = $this->request->search;
         if ($search !== null) {
             $searchParts = explode(' ', $search);
